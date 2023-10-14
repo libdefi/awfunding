@@ -12,7 +12,7 @@ export function createSystemCalls(
 ) {
   const createProject = async (
     _fundToken: string,
-    _fundTarget: number,
+    _fundTarget: ethers.BigNumber,
     _startTimestamp: number,
     _name: string,
     _uri: string,

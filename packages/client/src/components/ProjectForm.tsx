@@ -3,6 +3,12 @@ import DateTimePicker from './DateTimePicker';
 import { useMUD } from '../MUDContext';
 import { useState } from 'react';
 import { PRIZE_TOKEN_TEST } from '../constants/constants';
+import { utils } from 'ethers';
+import {
+  getPrizeTokenSymbol,
+  getPrizeTokenDecimalBySymbol,
+  numberToBigNumber,
+} from '../utils/common';
 
 type ProjectFormProps = {
   onClose: () => void;
@@ -46,7 +52,7 @@ const ProjectForm: FC<ProjectFormProps> = ({
   } = useMUD();
   const [donateToken, setDonateToken] = useState(donateTokens.ETH);
   const [startTimestamp, setStartTimestamp] = useState(getWeeksLater(1.0));
-  const [fundTarget, setFundTarget] = useState(1);
+  const [fundTarget, setFundTarget] = useState(1.005);
   const [name, setName] = useState('');
   const [uri, setUri] = useState('');
   const [imageUri, setImageUri] = useState('');
@@ -106,7 +112,7 @@ const ProjectForm: FC<ProjectFormProps> = ({
       ></textarea>
       <div className="flex">
         <div className="flex-1">
-          <h1 className="text-sm mb-1 mt-4 font-bold">Hack start(GMT)</h1>
+          <h1 className="text-sm mb-1 mt-4 font-bold">Donate start(GMT)</h1>
           <DateTimePicker
             selectedDateTime={startTimestamp}
             setSelectedDateTime={setStartTimestamp}
@@ -114,34 +120,28 @@ const ProjectForm: FC<ProjectFormProps> = ({
         </div>
       </div>
       
-      <h1 className="text-sm mb-1 mt-4 font-bold">Winners</h1>
+      <h1 className="text-sm mb-1 mt-4 font-bold">Target Amount</h1>
+      <p className="text-sm text-gray-500 mb-1">
+        If you fail to achieve the goal by the deadline, you will not receive the prize.
+      </p>
       <input
         type="number"
-        placeholder="1"
+        placeholder="1.00005" 
         className="input input-bordered w-full max-w-xs text-gray-900"
         value={fundTarget}
         onChange={(e) => setFundTarget(parseFloat(e.target.value))}
       />
       
-      <h1 className="text-sm mb-1 mt-4 font-bold">Prize token (Taiko testnet chain)</h1>
-      <select
-        className="select select-bordered w-full max-w-xs text-gray-900"
-        value={donateToken}
-        onChange={(e) => setDonateToken(e.target.value)}
-      >
-        <option value={donateTokens.ETH}>ETH</option>
-        <option value={donateTokens.USDC}>USDC</option>
-      </select>
-      
       <div className="mt-4">
         <button
-          className="btn bg-[#333333] text-white rounded-lg"
+          className="btn bg-[#F5BD41] text-white rounded-lg"
+          
           onClick={async (event) => {
             event.preventDefault();
             try {
               await createProject(
                 donateToken,
-                fundTarget,
+                numberToBigNumber(fundTarget, 18),
                 getTimestampFromDateAsUTC(startTimestamp),
                 name,
                 uri,

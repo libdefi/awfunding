@@ -108,21 +108,13 @@ const WalletConnection = ({ children }: Props) => {
         </div>
         <div className="flex-none mr-4">  
           <>
-            <a 
-              href={"https://komorebi88.notion.site/AW-Hack-doc-e82110e8c392409aadc3f5bee09239fc"} 
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <button className="pl-2 pr-2 pt-2 pb-2 mr-2 font-bold text-sm">
-                About AWHack
-              </button>
-            </a>
+            
             {wallet.accounts.length > 0 && network === NETWORK_ID ? (
               
                 <button
                   aria-expanded={open ? 'true' : undefined}
                   onClick={handleClick}
-                  className="btn bg-[#333333] text-white rounded-lg"
+                  className="btn bg-[#C6EF50] text-white rounded-lg"
                 >
                   {(wallet.accounts[0] as string)?.slice(0, 5)}...
                   {(wallet.accounts[0] as string)?.slice(-5)}
@@ -133,7 +125,7 @@ const WalletConnection = ({ children }: Props) => {
                 <button
                   onClick={handleConnect}
                   disabled={!isMetaMask}
-                  className="btn bg-[#333333] text-white rounded-lg"
+                  className="btn bg-[#C6EF50] text-white rounded-lg"
                 >
                   connect
                 </button>

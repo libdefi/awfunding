@@ -61,7 +61,7 @@ export const App = () => {
 
       <div className="text-center">
         <a onClick={openModal}>
-          <button className="btn bg-[#333333] text-white rounded-lg">Create a project</button>
+          <button className="btn bg-[#F5BD41] text-white rounded-lg">Create a project</button>
         </a>
       </div>
 
