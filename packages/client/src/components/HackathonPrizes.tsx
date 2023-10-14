@@ -4,13 +4,11 @@ import FullScreenModal from './FullScreenModal';
 import SpVoterModal from './SpVoterModal';
 import HackathonPrizeModal from './HackathonPrizeModal';
 
-import { PRIZE_TOKEN } from '../constants/constants';
 import { BigNumber, ethers } from 'ethers';
 import { getPrizeTokenSymbol, bigNumberToNumber } from '../utils/common';
 import { ToastError } from '../components/ToastError';
 import { ToastSuccess } from '../components/ToastSuccess';
 import { useInterval } from '../hooks/useInterval';
-import { PHASE } from '../constants/constants';
 import { walletContext } from '../WalletConnection';
 
 interface HackathonPrizesProps {
@@ -139,10 +137,8 @@ const HackathonPrizes = ({ hackathonId, prizeToken, winnerCount, phase, owner }:
             <h2 className="text-2xl font-bold">Prizes</h2>
             <a onClick={openModal}>
               <button
-                className={`pl-4 pr-4 pt-2 pb-2 text-sm rounded-xl text-white ${
-                  phase === PHASE.PREPARE_PRIZE ? 'bg-[#333333]' : 'bg-gray-400'
+                className={`pl-4 pr-4 pt-2 pb-2 text-sm rounded-xl text-white ${'bg-[#333333]'
                 }`}
-                disabled={phase !== PHASE.PREPARE_PRIZE}
               >
                 Donate {getPrizeTokenSymbol(prizeToken, chainId)}
               </button>
@@ -193,9 +189,8 @@ const HackathonPrizes = ({ hackathonId, prizeToken, winnerCount, phase, owner }:
             <a onClick={openModalSpVoter}>
               <button
                 className={`pl-4 pr-4 pt-2 pb-2 text-sm rounded-xl text-white ${
-                  phase === PHASE.PREPARE_PRIZE ? 'bg-[#333333]' : 'bg-gray-400'
+                  'bg-[#333333]'
                 }`}
-                disabled={phase !== PHASE.PREPARE_PRIZE}
               >
                 Add special voters
               </button>

@@ -4,7 +4,6 @@ import { Navigate } from 'react-router-dom';
 import { useInterval } from '../hooks/useInterval';
 import { useToast } from '../hooks/useToast';
 import { Toast } from './Toast';
-import { PHASE } from '../constants/constants';
 
 interface HackathonOverviewProps {
   uri: string;
@@ -87,60 +86,6 @@ const HackathonOverview = ({
           </tbody>
         </table>
       </div>
-
-      {myAddress === owner && phase === PHASE.PREPARE_PRIZE && (
-        <button
-          className="mt-6 bg-white text-[#333333] border border-[#333333] pl-4 pr-4 pt-2 pb-2 text-sm rounded-xl"
-          onClick={async (event) => {
-            event.preventDefault();
-            try {
-              await deleteHackathon(hackathonId);
-              showToast('success');
-              setShouldRedirect(true);
-            } catch (error) {
-              console.error(error);
-              showToast('error');
-            }
-          }}
-        >
-          Delete hackathon
-        </button>
-      )}
-      {myAddress === owner && phase === PHASE.END && (
-        <button
-          className="mt-6 bg-white text-[#333333] border border-[#333333] pl-4 pr-4 pt-2 pb-2 text-sm rounded-xl"
-          onClick={async (event) => {
-            event.preventDefault();
-            try {
-              await withdrawByOwner(hackathonId);
-              showToast('success');
-            } catch (error) {
-              console.error(error);
-              showToast('error');
-            }
-          }}
-        >
-          Withdraw rest of prize
-        </button>
-      )}
-      {myAddress === administrator && phase === PHASE.PREPARE_PRIZE && (
-        <button
-          className="mt-6 bg-white text-[#333333] border border-[#333333] pl-4 pr-4 pt-2 pb-2 text-sm rounded-xl"
-          onClick={async (event) => {
-            event.preventDefault();
-            try {
-              await deleteHackathonByAdmin(hackathonId);
-              showToast('success');
-              setShouldRedirect(true);
-            } catch (error) {
-              console.error(error);
-              showToast('error');
-            }
-          }}
-        >
-          Delete hackathon
-        </button>
-      )}
     </div>
   );
 };

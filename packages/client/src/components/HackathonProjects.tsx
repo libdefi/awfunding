@@ -3,7 +3,6 @@ import { useMUD } from '../MUDContext';
 import HackathonProjectCard from './HackathonProjectCard';
 import FullScreenModal from './FullScreenModal';
 import HackathonSubmit from './HackathonSubmit';
-import { PHASE } from '../constants/constants';
 import { useInterval } from '../hooks/useInterval';
 import VoteNone from './VoteNone';
 import { ToastError } from './ToastError';
@@ -91,41 +90,17 @@ const HackathonProjects = ({ hackathonId, phase }: HackathonProjectsProps) => {
             </div>
           ))
         }
-        {phase === PHASE.VOTING ? (
-          <>
-            <div className="w-full flex justify-center items-center">
-              <a onClick={openModalVote}>
-                <button className="mt-4 font-bold pl-10 pr-10 pt-2 pb-2 shadow-xl rounded-lg">
-                  Vote
-                </button>
-              </a>
-              
-            </div>
-            <VoteNone hackathonId={hackathonId} phase={phase} />
-          </>
-        ) : (
-          <></>
-        )}
         
       </div>
       
-      {phase === PHASE.HACKING ? (
-        <div className="text-center mb-10">
-          <a onClick={openModal}>
-            <button className="btn bg-[#333333] text-white rounded-lg">Submit project</button>
-          </a>
-          <p className="mt-2 text-[#333333] text-sm">1 project per address only</p>
-        </div>
-      ) : (
-        <div className="text-center mb-10">
-          <button
-            className="mt-4 text-white pl-10 pr-10 pt-2 pb-2 shadow-xl rounded-lg bg-gray-400"
-            disabled
-          >
-            Submit project
-          </button>
-        </div>
-      )}
+  
+      <div className="text-center mb-10">
+        <a onClick={openModal}>
+          <button className="btn bg-[#333333] text-white rounded-lg">Submit project</button>
+        </a>
+        <p className="mt-2 text-[#333333] text-sm">1 project per address only</p>
+      </div>
+      
     </>
   );
 };

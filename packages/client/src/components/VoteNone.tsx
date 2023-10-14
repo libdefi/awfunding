@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import FullScreenModal from './FullScreenModal';
 import VoteModal from './VoteModal';
-import { PHASE } from '../constants/constants';
 import { ToastError } from './ToastError';
 import { ToastSuccess } from './ToastSuccess';
 import { useMUD } from '../MUDContext';
@@ -69,17 +68,13 @@ const VoteNone = ({ hackathonId, phase }: HackathonPrizesProps) => {
           displayNum={false}
         />
       </FullScreenModal>
-      {phase === PHASE.VOTING ? (
-        <div className="flex justify-center items-center">
-          <a onClick={openModal}>
-            <button className="pl-10 pr-10 pt-2 pb-2 link">
-              Not vote any projects{votes > 0 ? `(Voted ${votes})` : ''}
-            </button>
-          </a>
-        </div>
-      ) : (
-        <></>
-      )}
+      <div className="flex justify-center items-center">
+        <a onClick={openModal}>
+          <button className="pl-10 pr-10 pt-2 pb-2 link">
+            Not vote any projects{votes > 0 ? `(Voted ${votes})` : ''}
+          </button>
+        </a>
+      </div>
     </div>
   );
 };

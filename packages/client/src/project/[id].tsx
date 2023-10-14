@@ -4,7 +4,6 @@ import { Footer } from '../components/Footer';
 import HackathonOverview from '../components/HackathonOverview';
 import HackathonPrizes from '../components/HackathonPrizes';
 import HackathonProjects from '../components/HackathonProjects';
-import Timeline from '../components/Timeline';
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
@@ -133,21 +132,6 @@ export const ProjectPage = () => {
             </a>
           </div>
         </div>
-      </div>
-      <div className="flex mt-6 p-6">
-        <div className={containerClassName}>{activeTabContent}</div>
-        {activeTab !== 3 && (
-          <Timeline
-            hackathonId={paddedHexStr}
-            phase={phase}
-            startTimestamp={startTimestamp}
-            submitPeriod={submitPeriod}
-            votingPeriod={votingPeriod}
-            withdrawalPeriod={withdrawalPeriod}
-            setPhase={setPhase}
-            owner={owner}
-          />
-        )}
       </div>
       <Footer />
     </>

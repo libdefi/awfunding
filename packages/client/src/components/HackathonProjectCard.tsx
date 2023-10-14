@@ -1,7 +1,6 @@
 import { useState, useEffect, useContext} from 'react';
 import VotingBox from '../../public/voting_box.svg';
 import { useMUD } from '../MUDContext';
-import { PHASE } from '../constants/constants';
 import { ToastError } from './ToastError';
 import { walletContext } from '../WalletConnection'; 
 
@@ -95,43 +94,24 @@ return (
           </div>
         </div>
       </a>
-      {phase === PHASE.VOTING ? (
-        <div className="flex justify-center items-center mt-4 space-x-2">
-          <button
-            onClick={handleVoteDecrease}
-            className="font-bold pl-6 pr-6 pt-2 pb-2 shadow-xl rounded-lg"
-          >
-            -
-          </button>
-          <span className="text-xl font-bold">{votesNum[submitter] || 0}</span>
-          <button
-            onClick={handleVoteIncrease}
-            className="font-bold pl-6 pr-6 pt-2 pb-2 shadow-xl rounded-lg"
-          >
-            +
-          </button>
-        </div>
-      ) : (
-        <div className="flex justify-center items-center mt-4 space-x-2">
-          <button
-            onClick={handleVoteDecrease}
-            className="font-bold pl-6 pr-6 pt-2 pb-2 shadow-xl rounded-lg bg-gray-400"
-            disabled
-          >
-            -
-          </button>
-          <span className="text-xl font-bold">{votesNum[submitter] || 0}</span>
-          <button
-            onClick={handleVoteIncrease}
-            className="font-bold pl-6 pr-6 pt-2 pb-2 shadow-xl rounded-lg bg-gray-400"
-            disabled
-          >
-            +
-          </button>
-        </div>
-      )}
+      
+      <div className="flex justify-center items-center mt-4 space-x-2">
+        <button
+          onClick={handleVoteDecrease}
+          className="font-bold pl-6 pr-6 pt-2 pb-2 shadow-xl rounded-lg"
+        >
+          -
+        </button>
+        <span className="text-xl font-bold">{votesNum[submitter] || 0}</span>
+        <button
+          onClick={handleVoteIncrease}
+          className="font-bold pl-6 pr-6 pt-2 pb-2 shadow-xl rounded-lg"
+        >
+          +
+        </button>
+      </div>
       {
-        connectedWalletAddress === submitter.toLowerCase() && prize > 0 && phase === PHASE.WITHDRAWING && (
+        (
           <div className="flex justify-center items-center">
             <button
               className="mt-4 font-bold pl-10 pr-10 pt-2 pb-2 shadow-xl rounded-lg"

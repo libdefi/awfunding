@@ -19,7 +19,7 @@ const ProjectForm: FC<ProjectFormProps> = ({
   setError,
   setSuccess,
 }) => {
-  const prizeTokens = PRIZE_TOKEN_TEST;
+  const donateTokens = PRIZE_TOKEN_TEST;
 
   const getWeeksLater = (weeks: number) => {
     const date = new Date();
@@ -42,19 +42,16 @@ const ProjectForm: FC<ProjectFormProps> = ({
   };
 
   const {
-    systemCalls: { createHackathon },
+    systemCalls: { createProject },
   } = useMUD();
-  const [prizeToken, setPrizeToken] = useState(prizeTokens.ETH);
+  const [donateToken, setDonateToken] = useState(donateTokens.ETH);
   const [startTimestamp, setStartTimestamp] = useState(getWeeksLater(1.0));
-  const [submitPeriod, setSubmitPeriod] = useState(getWeeksLater(2.5));
-  const [votingPeriod, setVotingPeriod] = useState(getWeeksLater(3.0));
-  const [withdrawalPeriod, setWithdrawalPeriod] = useState(getWeeksLater(4.5));
-  const [winnerCount, setWinnerCount] = useState(1);
+  const [fundTarget, setFundTarget] = useState(1);
   const [name, setName] = useState('');
   const [uri, setUri] = useState('');
   const [imageUri, setImageUri] = useState('');
   const [description, setDescription] = useState('');
-  const [voteNft, setVoteNft] = useState('');
+  const [demoUri, setDemoUri] = useState('');
 
   return (
     <div className="p-4 overflow-y-auto max-h-[800px]">
@@ -75,6 +72,16 @@ const ProjectForm: FC<ProjectFormProps> = ({
         className="input input-bordered w-full max-w-xs text-gray-900"
         value={uri}
         onChange={(e) => setUri(e.target.value)}
+      />
+
+      <h1 className="text-sm mb-1 mt-4 font-bold">Demo URL</h1>
+      <p className="text-sm text-gray-500 mb-1">Please provide details of your project.</p>
+      <input
+        type="text"
+        placeholder="https://xxxxxxx.framer.website/"
+        className="input input-bordered w-full max-w-xs text-gray-900"
+        value={demoUri}
+        onChange={(e) => setDemoUri(e.target.value)}
       />
       
       <h1 className="text-sm mb-1 mt-4 font-bold">Title image</h1>
@@ -106,83 +113,48 @@ const ProjectForm: FC<ProjectFormProps> = ({
           />
         </div>
       </div>
-      <div className="flex">
-        <div className="flex-1">
-          <h1 className="text-sm mb-1 mt-4 font-bold">Project submit due(GMT)</h1>
-          <DateTimePicker selectedDateTime={submitPeriod} setSelectedDateTime={setSubmitPeriod} />
-        </div>
-      </div>
-      <div className="flex">
-        <div className="flex-1">
-          <h1 className="text-sm mb-1 mt-4 font-bold">Voting due(GMT)</h1>
-          <DateTimePicker selectedDateTime={votingPeriod} setSelectedDateTime={setVotingPeriod} />
-        </div>
-      </div>
-      <div className="flex">
-        <div className="flex-1">
-          <h1 className="text-sm mb-1 mt-4 font-bold">Withdrawing due(GMT)</h1>
-          <DateTimePicker
-            selectedDateTime={withdrawalPeriod}
-            setSelectedDateTime={setWithdrawalPeriod}
-          />
-        </div>
-      </div>
       
       <h1 className="text-sm mb-1 mt-4 font-bold">Winners</h1>
       <input
         type="number"
         placeholder="1"
         className="input input-bordered w-full max-w-xs text-gray-900"
-        value={winnerCount}
-        onChange={(e) => setWinnerCount(parseFloat(e.target.value))}
+        value={fundTarget}
+        onChange={(e) => setFundTarget(parseFloat(e.target.value))}
       />
       
-      <h1 className="text-sm mb-1 mt-4 font-bold">Prize token (Optimism chain)</h1>
+      <h1 className="text-sm mb-1 mt-4 font-bold">Prize token (Taiko testnet chain)</h1>
       <select
         className="select select-bordered w-full max-w-xs text-gray-900"
-        value={prizeToken}
-        onChange={(e) => setPrizeToken(e.target.value)}
+        value={donateToken}
+        onChange={(e) => setDonateToken(e.target.value)}
       >
-        <option value={prizeTokens.ETH}>ETH</option>
-        <option value={prizeTokens.USDC}>USDC</option>
-        <option value={prizeTokens.DAI}>DAI</option>
+        <option value={donateTokens.ETH}>ETH</option>
+        <option value={donateTokens.USDC}>USDC</option>
       </select>
       
-      <h1 className="text-sm mb-1 mt-4 font-bold">Vote NFT Address</h1>
-      <p className="text-sm text-gray-500 mb-1">This vote contract is only ERC721(With Enumerable) on Optimism only.</p>
-      <input
-        type="text"
-        placeholder="0xb1008c037aA0dB479B9D5b0E49a27337fB29D72E"
-        className="input input-bordered w-full max-w-s text-gray-900"
-        value={voteNft}
-        onChange={(e) => setVoteNft(e.target.value)}
-      />
-
       <div className="mt-4">
         <button
           className="btn bg-[#333333] text-white rounded-lg"
           onClick={async (event) => {
             event.preventDefault();
             try {
-              await createHackathon(
-                prizeToken,
+              await createProject(
+                donateToken,
+                fundTarget,
                 getTimestampFromDateAsUTC(startTimestamp),
-                getTimestampFromDateAsUTC(submitPeriod),
-                getTimestampFromDateAsUTC(votingPeriod),
-                getTimestampFromDateAsUTC(withdrawalPeriod),
-                winnerCount,
                 name,
                 uri,
                 imageUri,
                 description,
-                voteNft,
+                demoUri,
               );
               const newMaxProjectNum = maxProjectNum + 1;
               setMaxProjectNum(newMaxProjectNum);
               setSuccess('Your project has been created!.');
             } catch (error) {
               console.error(error);
-              setError('An error occurred while creating the project.');
+              setError('An error occurred while creating a project.');
             }
             onClose();
           }}
