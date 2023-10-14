@@ -1,0 +1,30 @@
+[profile.default]
+solc_version = "0.8.13"
+ffi = false
+fuzz_runs = 256
+optimizer = true
+optimizer_runs = 3000
+verbosity = 2
+src = "src"
+test = "test"
+out = "out"
+allow_paths = [
+  # pnpm symlinks to the project root's node_modules
+  "../../node_modules",
+  # template uses linked mud packages from within the mud monorepo
+  "../../../../packages",
+  # projects created from this template and using linked mud packages
+  "../../../mud/packages",
+]
+extra_output_files = [
+  "abi",
+  "evm.bytecode"
+]
+fs_permissions = [{ access = "read", path = "./"}]
+
+[profile.lattice-testnet]
+eth_rpc_url = "https://follower.testnet-chain.linfra.xyz"
+[profile.opgoerli]
+eth_rpc_url = "https://opt-goerli.g.alchemy.com/v2/2L0Qpi2fV7GCYQtHqHe3sLL-y5H_KRL6"
+[profile.taikoTestnetSepolia]
+eth_rpc_url = "https://rpc.jolnir.taiko.xyz"
