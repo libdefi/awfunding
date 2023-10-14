@@ -8,10 +8,6 @@ export const getPrizeTokenSymbol = (input: string, chainId: number): string | un
   );
 };
 
-export const getPrizeTokenDecimalBySymbol = (symbol: string): number => {
-  return PRIZE_TOKEN_TEST[symbol].decimal;
-};
-
 export const numberToBigNumber = (amount: number, decimal: number): BigNumber => {
   // console.log('amount', amount.toString());
 

@@ -54,7 +54,7 @@ export const App = () => {
       {error && <ToastError message={error} />}
       {success && <ToastSuccess message={success} />}
       <div className="text-center mt-12 mb-6">
-        <h1 className="font-bold text-4xl">
+        <h1 className="font-bold text-2xl">
           Community driven support creates onchain worlds.<br /> hackathons for future
         </h1>
       </div>
@@ -75,7 +75,7 @@ export const App = () => {
         />
       </FullScreenModal>
 
-      {/* <ProjectCards maxProjectNum={maxProjectNum} /> */}
+      <ProjectCards maxProjectNum={maxProjectNum} />
 
       <Footer />
     </>

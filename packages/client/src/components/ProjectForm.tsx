@@ -6,7 +6,6 @@ import { PRIZE_TOKEN_TEST } from '../constants/constants';
 import { utils } from 'ethers';
 import {
   getPrizeTokenSymbol,
-  getPrizeTokenDecimalBySymbol,
   numberToBigNumber,
 } from '../utils/common';
 
