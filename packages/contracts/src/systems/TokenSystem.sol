@@ -10,24 +10,23 @@ contract TokenSystem is System {
     _;
   }
 
-  modifier deposit(
+  modifier donate(
     bytes32 _projectId,
     uint256 _amount
   ){
-    //validate phase
     ProjectData memory _projectData = Project.get(_projectId);
     require(_projectData.fundingPeriod <= block.timestamp, "fundingPeriod has already passed.");
 
-    //set deposit amount
-    uint256 _deposit = Project.getFundedSum(_projectId);
-    Project.setFundedSum(_projectId, _deposit + _amount);
+    //set donate amount
+    uint256 _donate = Project.getFundedSum(_projectId);
+    Project.setFundedSum(_projectId, _donate + _amount);
 
 
     uint256 amounts = Donator.get(_projectId, _msgSender());
     if (amounts > 0) {
-      Donator.set(_projectId, _msgSender(), _deposit + amounts);
+      Donator.set(_projectId, _msgSender(), _donate + amounts);
     } else {
-      Donator.set(_projectId, _msgSender(), _deposit);
+      Donator.set(_projectId, _msgSender(), _donate);
     }
     
 
@@ -38,10 +37,10 @@ contract TokenSystem is System {
     _;
   }
 
-  function depositPrizeEth(
+  function donateEth(
     bytes32 _projectId,
     uint256 _amount
-  ) public payable deposit(_projectId, _amount) {
+  ) public payable donate(_projectId, _amount) {
     //transfer ETH
     require(msg.value == _amount, "ETH amount is not equal to the amount specified.");
   } 

@@ -2,7 +2,7 @@ import { FC, useEffect } from 'react';
 import DateTimePicker from './DateTimePicker';
 import { useMUD } from '../MUDContext';
 import { useState } from 'react';
-import { PRIZE_TOKEN, PRIZE_TOKEN_TEST } from '../constants/constants';
+import { PRIZE_TOKEN_TEST } from '../constants/constants';
 
 type ProjectFormProps = {
   onClose: () => void;
@@ -19,7 +19,7 @@ const ProjectForm: FC<ProjectFormProps> = ({
   setError,
   setSuccess,
 }) => {
-  const prizeTokens = import.meta.env.VITE_CHAIN_ID == 10 ? PRIZE_TOKEN : PRIZE_TOKEN_TEST;
+  const prizeTokens = PRIZE_TOKEN_TEST;
 
   const getWeeksLater = (weeks: number) => {
     const date = new Date();

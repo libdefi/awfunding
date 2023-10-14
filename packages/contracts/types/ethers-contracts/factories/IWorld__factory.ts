@@ -356,16 +356,6 @@ const _abi = [
         type: "uint256",
       },
       {
-        internalType: "uint256",
-        name: "_fundingPeriod",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "_withdrawalPeriod",
-        type: "uint256",
-      },
-      {
         components: [
           {
             internalType: "string",
@@ -470,7 +460,7 @@ const _abi = [
         type: "uint256",
       },
     ],
-    name: "depositPrizeEth",
+    name: "donateEth",
     outputs: [],
     stateMutability: "payable",
     type: "function",

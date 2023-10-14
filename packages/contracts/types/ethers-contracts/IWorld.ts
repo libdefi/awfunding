@@ -89,11 +89,11 @@ export interface IWorldInterface extends utils.Interface {
   functions: {
     "call(bytes16,bytes16,bytes)": FunctionFragment;
     "changeAdmin(address)": FunctionFragment;
-    "createProject(address,uint256,uint256,uint256,uint256,(string,string,string,string,string))": FunctionFragment;
+    "createProject(address,uint256,uint256,(string,string,string,string,string))": FunctionFragment;
     "deleteProjectByAdmin(bytes32)": FunctionFragment;
     "deleteRecord(bytes32,bytes32[])": FunctionFragment;
     "deleteRecord(bytes16,bytes16,bytes32[])": FunctionFragment;
-    "depositPrizeEth(bytes32,uint256)": FunctionFragment;
+    "donateEth(bytes32,uint256)": FunctionFragment;
     "emitEphemeralRecord(bytes16,bytes16,bytes32[],bytes)": FunctionFragment;
     "emitEphemeralRecord(bytes32,bytes32[],bytes)": FunctionFragment;
     "getAdministrator()": FunctionFragment;
@@ -151,7 +151,7 @@ export interface IWorldInterface extends utils.Interface {
       | "deleteProjectByAdmin"
       | "deleteRecord(bytes32,bytes32[])"
       | "deleteRecord(bytes16,bytes16,bytes32[])"
-      | "depositPrizeEth"
+      | "donateEth"
       | "emitEphemeralRecord(bytes16,bytes16,bytes32[],bytes)"
       | "emitEphemeralRecord(bytes32,bytes32[],bytes)"
       | "getAdministrator"
@@ -219,8 +219,6 @@ export interface IWorldInterface extends utils.Interface {
       PromiseOrValue<string>,
       PromiseOrValue<BigNumberish>,
       PromiseOrValue<BigNumberish>,
-      PromiseOrValue<BigNumberish>,
-      PromiseOrValue<BigNumberish>,
       ProjectInfoDataStruct
     ]
   ): string;
@@ -241,7 +239,7 @@ export interface IWorldInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: "depositPrizeEth",
+    functionFragment: "donateEth",
     values: [PromiseOrValue<BytesLike>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
@@ -588,10 +586,7 @@ export interface IWorldInterface extends utils.Interface {
     functionFragment: "deleteRecord(bytes16,bytes16,bytes32[])",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "depositPrizeEth",
-    data: BytesLike
-  ): Result;
+  decodeFunctionResult(functionFragment: "donateEth", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "emitEphemeralRecord(bytes16,bytes16,bytes32[],bytes)",
     data: BytesLike
@@ -879,8 +874,6 @@ export interface IWorld extends BaseContract {
       _fundToken: PromiseOrValue<string>,
       _fundTarget: PromiseOrValue<BigNumberish>,
       _startTimestamp: PromiseOrValue<BigNumberish>,
-      _fundingPeriod: PromiseOrValue<BigNumberish>,
-      _withdrawalPeriod: PromiseOrValue<BigNumberish>,
       _projectInfo: ProjectInfoDataStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
@@ -903,7 +896,7 @@ export interface IWorld extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    depositPrizeEth(
+    donateEth(
       _projectId: PromiseOrValue<BytesLike>,
       _amount: PromiseOrValue<BigNumberish>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
@@ -1237,8 +1230,6 @@ export interface IWorld extends BaseContract {
     _fundToken: PromiseOrValue<string>,
     _fundTarget: PromiseOrValue<BigNumberish>,
     _startTimestamp: PromiseOrValue<BigNumberish>,
-    _fundingPeriod: PromiseOrValue<BigNumberish>,
-    _withdrawalPeriod: PromiseOrValue<BigNumberish>,
     _projectInfo: ProjectInfoDataStruct,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
@@ -1261,7 +1252,7 @@ export interface IWorld extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  depositPrizeEth(
+  donateEth(
     _projectId: PromiseOrValue<BytesLike>,
     _amount: PromiseOrValue<BigNumberish>,
     overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
@@ -1595,8 +1586,6 @@ export interface IWorld extends BaseContract {
       _fundToken: PromiseOrValue<string>,
       _fundTarget: PromiseOrValue<BigNumberish>,
       _startTimestamp: PromiseOrValue<BigNumberish>,
-      _fundingPeriod: PromiseOrValue<BigNumberish>,
-      _withdrawalPeriod: PromiseOrValue<BigNumberish>,
       _projectInfo: ProjectInfoDataStruct,
       overrides?: CallOverrides
     ): Promise<void>;
@@ -1619,7 +1608,7 @@ export interface IWorld extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    depositPrizeEth(
+    donateEth(
       _projectId: PromiseOrValue<BytesLike>,
       _amount: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -2000,8 +1989,6 @@ export interface IWorld extends BaseContract {
       _fundToken: PromiseOrValue<string>,
       _fundTarget: PromiseOrValue<BigNumberish>,
       _startTimestamp: PromiseOrValue<BigNumberish>,
-      _fundingPeriod: PromiseOrValue<BigNumberish>,
-      _withdrawalPeriod: PromiseOrValue<BigNumberish>,
       _projectInfo: ProjectInfoDataStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
@@ -2024,7 +2011,7 @@ export interface IWorld extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    depositPrizeEth(
+    donateEth(
       _projectId: PromiseOrValue<BytesLike>,
       _amount: PromiseOrValue<BigNumberish>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
@@ -2359,8 +2346,6 @@ export interface IWorld extends BaseContract {
       _fundToken: PromiseOrValue<string>,
       _fundTarget: PromiseOrValue<BigNumberish>,
       _startTimestamp: PromiseOrValue<BigNumberish>,
-      _fundingPeriod: PromiseOrValue<BigNumberish>,
-      _withdrawalPeriod: PromiseOrValue<BigNumberish>,
       _projectInfo: ProjectInfoDataStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
@@ -2383,7 +2368,7 @@ export interface IWorld extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    depositPrizeEth(
+    donateEth(
       _projectId: PromiseOrValue<BytesLike>,
       _amount: PromiseOrValue<BigNumberish>,
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }

@@ -10,8 +10,6 @@ interface IProjectSystem {
     address _fundToken,
     uint256 _fundTarget,
     uint256 _startTimestamp,
-    uint256 _fundingPeriod,
-    uint256 _withdrawalPeriod,
     ProjectInfoData memory _projectInfo
   ) external;
 

@@ -14,25 +14,21 @@ contract ProjectSystem is System {
     address _fundToken,
     uint256 _fundTarget,
     uint256 _startTimestamp,
-    uint256 _fundingPeriod,
-    uint256 _withdrawalPeriod,
     ProjectInfoData memory _projectInfo
   ) public  {
     require(_startTimestamp >= block.timestamp, "StartTimestamp is not future.");
     bytes32 _projectId = _incrementProjectId();
-    // withdrawはFunding期限後2週間以内に行う。
+    uint256 withdrawalPeriod = _startTimestamp + 2 weeks;
+    uint256 fundingPeriod = _startTimestamp + 30 days;
     Project.set(_projectId,ProjectData(
       _msgSender(),
       _fundToken,
       _fundTarget,
       0,
-      _fundingPeriod,
-      _withdrawalPeriod
+      fundingPeriod,
+      withdrawalPeriod
     ));
     ProjectInfo.set(_projectId,_projectInfo);
-    // ProjectFund.set(_prokectId,
-    //   ProjectFundData( 0, new address[](0))
-    // );
   }
 
   function _incrementProjectId() internal returns(bytes32 newProjectId_){
