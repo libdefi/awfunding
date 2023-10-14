@@ -15,7 +15,7 @@ contract TokenSystem is System {
     uint256 _amount
   ){
     ProjectData memory _projectData = Project.get(_projectId);
-    require(_projectData.fundingPeriod <= block.timestamp, "fundingPeriod has already passed.");
+    // require(_projectData.fundingPeriod <= block.timestamp, "fundingPeriod has already passed.");
 
     //set donate amount
     uint256 _donate = Project.getFundedSum(_projectId);
@@ -48,8 +48,8 @@ contract TokenSystem is System {
 
   function withdrawByOwner(bytes32 _projectId) public onlyProjectOwner(_projectId) {
     ProjectData memory _projectData = Project.get(_projectId);
-    require(_projectData.fundingPeriod > block.timestamp, "fundingPeriod is not passed.");
-    require(_projectData.fundedSum >= _projectData.fundTarget, "You cant acheieved the target.");
+    // require(_projectData.fundingPeriod > block.timestamp, "fundingPeriod is not passed.");
+    // require(_projectData.fundedSum >= _projectData.fundTarget, "You cant acheieved the target.");
 
     //if prize is still left, withdraw to owner
     uint256 _prize = Project.getFundedSum(_projectId);
@@ -60,11 +60,12 @@ contract TokenSystem is System {
   }
 
   function withdrawByDonator(bytes32 _projectId) public payable {
-    ProjectData memory _projectData = Project.get(_projectId);
-    require(_projectData.fundingPeriod > block.timestamp, "fundingPeriod is not passed.");
-    require(_projectData.fundedSum < _projectData.fundTarget, "The target overpassed, donators can't withdwaw it.");
+    // require(_projectData.fundingPeriod > block.timestamp, "fundingPeriod is not passed.");
+    // require(_projectData.fundedSum < _projectData.fundTarget, "The target overpassed, donators can't withdwaw it.");
 
     uint256 amounts = Donator.get(_projectId, _msgSender());
+    require(amounts > 0, "It does not appear to have been donated at this address.");
+    Donator.deleteRecord(_projectId, _msgSender());
     payable(_msgSender()).transfer(amounts);
   }
 }

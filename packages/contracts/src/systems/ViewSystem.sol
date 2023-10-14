@@ -47,7 +47,8 @@ contract ViewSystem is System {
     return _projectData.withdrawalPeriod < block.timestamp;
   }
 
-  function getProjectDonator(bytes32 _hackathonId) public view returns(ProjectDonatorData memory){
-    return ProjectDonator.get(_hackathonId);
+  function getProjectDonator(bytes32 _projectId) public view returns(uint256[] memory, address[] memory){
+    ProjectDonatorData memory _data =  ProjectDonator.get(_projectId);
+    return (_data.amounts, _data.walletAddress);
   }
 }

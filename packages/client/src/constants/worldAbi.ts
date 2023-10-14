@@ -3,7 +3,7 @@ export const worldAbi = [
     inputs: [
       {
         internalType: 'bytes32',
-        name: '_hackathonId',
+        name: '_projectId',
         type: 'bytes32',
       },
       {
@@ -12,7 +12,7 @@ export const worldAbi = [
         type: 'uint256',
       },
     ],
-    name: 'depositPrizeEth',
+    name: 'donateEth',
     outputs: [],
     stateMutability: 'payable',
     type: 'function',

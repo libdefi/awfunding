@@ -1,19 +1,20 @@
 import { useMUD } from '../MUDContext';
-import { ethers } from 'ethers';
-import { Footer } from '../components/Footer';
-import HackathonOverview from '../components/HackathonOverview';
-import HackathonPrizes from '../components/HackathonPrizes';
-import HackathonProjects from '../components/HackathonProjects';
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import FullScreenModal from '../components/FullScreenModal';
+import DonateModal from '../components/DonateModal';
+import { ToastError } from '../components/ToastError';
+import { ToastSuccess } from '../components/ToastSuccess';
+import { BigNumber, ethers } from 'ethers';
 
 export const ProjectPage = () => {
   const { id } = useParams();
   const {
     network: { worldContract },
+    systemCalls: { withdrawByOwner, withdrawByDonator },
   } = useMUD();
   const bigNum = ethers.BigNumber.from(id);
-  const paddedHexStr = '0x' + bigNum.toHexString().slice(2).padStart(64, '0');
+  const projectId = '0x' + bigNum.toHexString().slice(2).padStart(64, '0');
 
   const [activeTab, setActiveTab] = useState(1);
   const [name, setName] = useState('');
@@ -28,112 +29,147 @@ export const ProjectPage = () => {
   const [submitPeriod, setSubmitPeriod] = useState(0);
   const [votingPeriod, setVotingPeriod] = useState(0);
   const [withdrawalPeriod, setWithdrawalPeriod] = useState(0);
-  const [productId, setProductId] = useState('');
+  const [modalOpen, setModalOpen] = useState(false);;
 
   const handleTabClick = (tabIndex: number) => {
     setActiveTab(tabIndex);
   };
 
-  // useEffect(() => {
-  //   (async () => {
-  //     const hackathon = await worldContract.getHackathon(paddedHexStr);
-  //     const hackathonInfo = await worldContract.getHackathonInfo(paddedHexStr);
-  //     const hackathonVoteNft = await worldContract.getHackathonVoteNft(paddedHexStr);
-  //     setName(hackathonInfo.name);
-  //     setUri(hackathonInfo.uri);
-  //     setDescription(hackathonInfo.description);
-  //     setOwner(hackathon.owner);
-  //     setPrizeToken(hackathon.prizeToken);
-  //     setPhase(hackathon.phase);
-  //     setWinnerCount(hackathon.winnerCount);
-  //     setVoteNft(hackathonVoteNft.voteNft);
-  //     setStartTimestamp(hackathon.startTimestamp.toNumber());
-  //     setSubmitPeriod(hackathon.submitPeriod.toNumber());
-  //     setVotingPeriod(hackathon.votingPeriod.toNumber());
-  //     setWithdrawalPeriod(hackathon.withdrawalPeriod.toNumber());
-  //     setProductId(paddedHexStr);
-  //   })();
-  // }, [paddedHexStr, worldContract]);
-
-  const OverviewTabContent: React.FC = () => {
-    return (
-      <HackathonOverview
-        uri={uri}
-        name={name}
-        description={description}
-        owner={owner}
-        hackathonId={productId}
-        winnerCount={winnerCount}
-        voteNft={voteNft}
-        phase={phase}
-      />
-    );
+  const openModal = () => {
+    setModalOpen(true);
   };
 
-  const PrizesTabContent: React.FC = () => {
-    return (
-      <HackathonPrizes
-        hackathonId={paddedHexStr}
-        prizeToken={prizeToken}
-        winnerCount={winnerCount}
-        phase={phase}
-        owner={owner}
-      />
-    );
+  const closeModal = () => {
+    setModalOpen(false);
   };
 
-  const ProjectsTabContent: React.FC = () => {
-    return <HackathonProjects hackathonId={paddedHexStr} phase={phase} />;
-  };
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
 
-  let activeTabContent;
-  let containerClassName = 'w-3/4';
-  if (activeTab === 1) {
-    activeTabContent = <OverviewTabContent />;
-  } else if (activeTab === 2) {
-    activeTabContent = <PrizesTabContent />;
-  } else if (activeTab === 3) {
-    activeTabContent = <ProjectsTabContent />;
-    containerClassName = 'w-full';
-  }
+  const initialSponsors: [BigNumber[], string[]] = [[], []];
+  const [donator, setDonator] = useState(initialSponsors);
+
+  useEffect(() => {
+    (async () => {
+      const fetchedSpecialVoters: number[] = [];
+      const donators = await worldContract.getProjectDonator(projectId);
+      if (donators && donators.length > 0 && donators[0].length > 0 && donators[1].length > 0) {
+        // Sorted in order of the amount deposited.
+        const sortedSponsors = donators[0].map((value, index) => ({
+          depositSum: value,
+          address: donators[1][index],
+        })).sort((a, b) => b.depositSum.sub(a.depositSum).toNumber());
+  
+        setDonator([
+          sortedSponsors.map(item => item.depositSum),
+          sortedSponsors.map(item => item.address)
+        ]);
+      }
+
+    })();
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setError(null);
+      setSuccess(null);
+    }, 10000);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [error, success]);
 
   return (
-    <>
-      <div className="bg-black text-center">
-        <div className="w-full h-[128px] flex items-center justify-center">
-          <h1 className="font-arcade font-bold text-4xl text-white">{name}</h1>
-        </div>
-        <div className="ml-4 relative ">
-          <div className="" style={{ zIndex: -1 }}></div>
-          <div className="tabs">
-            <a
-              className={`tab tab-lifted font-bold ${
-                activeTab === 1 ? 'tab-active bg-white text-black' : 'text-white '
-              }`}
-              onClick={() => handleTabClick(1)}
-            >
-              Overview
-            </a>
-            <a
-              className={`tab tab-lifted font-bold ${
-                activeTab === 2 ? 'tab-active bg-white text-black' : 'text-white '
-              }`}
-              onClick={() => handleTabClick(2)}
-            >
-              Setup
-            </a>
-            <a
-              className={`tab tab-lifted font-bold ${
-                activeTab === 3 ? 'tab-active bg-white text-black' : 'text-white '
-              }`}
-              onClick={() => handleTabClick(3)}
-            >
-              Projects
+    <div className="h-auto">
+      {error && <ToastError message={error} />}
+      {success && <ToastSuccess message={success} />}
+      <div className="card lg:card-side shadow-xl bg-black">
+        <figure><img src="https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F582309379%2F1637870253013%2F1%2Foriginal.20230824-143912?w=940&auto=format%2Ccompress&q=75&sharp=10&rect=0%2C120%2C1920%2C960&s=a8b9007be433fbfd7df29137c550abbb" alt="Album"/></figure>
+        <div className="card-body">
+          <p className="text-white">Donated amount</p>
+          <h2 className="card-title text-white">1.0005 ETH</h2>
+          <p className="text-white">Target 1.25 ETH</p>
+          <div className="text-white">
+            <span>Donator</span>
+            <span>33 people</span>
+          </div>
+          <div className="text-white">
+            <span>Rest</span>
+            <span>14 days</span>
+          </div>
+          <div className="card-actions justify-end">
+            <a onClick={openModal}>
+              <button className="btn bg-[#F5BD41] text-white">Donate</button>
             </a>
           </div>
+          <FullScreenModal isOpen={modalOpen} onClose={closeModal}>
+              <DonateModal 
+                onClose={closeModal} 
+                projectId={projectId} 
+                prizeToken={prizeToken}
+                setError={setError}
+                setSuccess={setSuccess} 
+              />
+            </FullScreenModal>
         </div>
       </div>
-      <Footer />
-    </>
+      
+      {donator.length > 0 && donator[0].length > 0 ? ( 
+        <div className="grid grid-cols-2 p-4 rounded-md shadow-md mt-4 mb-12">
+          <div className="col-span-1 border-b font-bold pb-2">Account</div>
+          <div className="col-span-1 border-b font-bold pb-2">Amount</div>
+
+          {donator[0].map((depositSum, index) => (
+            <>
+              <div key={`sum-${index}`}>
+                <div className="col-span-1 border-b pb-2 pt-2 text-gray-500">
+                  <a
+                      href={`https://optimistic.etherscan.io/address/${donator[1][index]}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-500"
+                    >
+                      {`${donator[1][index].slice(0, 5)}...${donator[1][index].slice(-5)}`}
+                    </a>
+                </div>
+              </div>
+              <div key={`sponsor-${index}`}>
+                <div className="col-span-1 border-b pb-2 pt-2 text-gray-500">
+                  {ethers.utils.formatUnits(depositSum, 18)}
+                </div>
+              </div>
+            </>
+          ))}
+        </div>
+      ) : (
+        <p>No one donated</p>
+      )}
+      <div className="mt-10 mx-auto">
+        {
+          (
+            <div className="flex justify-center items-center">
+              <button
+                className="mt-4 font-bold pl-10 pr-10 pt-2 pb-2 shadow-xl rounded-lg"
+                onClick={async (event) => {
+                  event.preventDefault();
+                  
+                  try {
+                    await withdrawByOwner(projectId);
+                    setSuccess('Withdraw success');
+                  } catch (error) {
+                    console.error(error);
+                    setError('Withdraw error');
+                  }
+                }}
+              >
+                WithdrawPrizeByOwner
+              </button>
+              
+            </div>
+          )
+        }
+      </div>
+    </div>
   );
 };

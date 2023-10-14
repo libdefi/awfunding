@@ -742,28 +742,21 @@ const _abi = [
     inputs: [
       {
         internalType: "bytes32",
-        name: "_hackathonId",
+        name: "_projectId",
         type: "bytes32",
       },
     ],
     name: "getProjectDonator",
     outputs: [
       {
-        components: [
-          {
-            internalType: "uint256[]",
-            name: "amounts",
-            type: "uint256[]",
-          },
-          {
-            internalType: "address[]",
-            name: "walletAddress",
-            type: "address[]",
-          },
-        ],
-        internalType: "struct ProjectDonatorData",
+        internalType: "uint256[]",
         name: "",
-        type: "tuple",
+        type: "uint256[]",
+      },
+      {
+        internalType: "address[]",
+        name: "",
+        type: "address[]",
       },
     ],
     stateMutability: "view",

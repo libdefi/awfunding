@@ -62,17 +62,9 @@ export const ProjectCard = ({ projectNum }: ProjectCardProps) => {
     return timeInSeconds >= 0 ? `about ${timeRemaining}` : `Finished`;
   };
 
-  // const depositAmount = deposit
-  //   ? bigNumberToNumber(deposit, getDecimalPlaces(prizeToken, chainId))
-  //   : 0;
-
-  // function getDecimalPlaces(prizeToken: string, chainId: number): number {
-  //   return getPrizeTokenSymbol(prizeToken, chainId) === 'USDC' ? 6: 18;
-  // }
-
   return loading ? (
     <div className="flex items-center justify-center">
-      <span className="loading loading-bars loading-lg"></span>
+      <span className="loading-spinner text-info"></span>
     </div>
   ) : name ? (
     <Link to={`/project/${projectNum}`}>

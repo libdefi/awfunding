@@ -18,7 +18,7 @@ root.render(
     <MUDSetup>
       <Router>
         <Routes>
-          <Route path="/prokject/:id" element={<ProjectPage />} />
+          <Route path="/project/:id" element={<ProjectPage />} />
           <Route path="/" element={<App />} />
         </Routes>
       </Router>

@@ -75,16 +75,6 @@ export type ProjectDataStructOutput = [
   withdrawalPeriod: BigNumber;
 };
 
-export type ProjectDonatorDataStruct = {
-  amounts: PromiseOrValue<BigNumberish>[];
-  walletAddress: PromiseOrValue<string>[];
-};
-
-export type ProjectDonatorDataStructOutput = [BigNumber[], string[]] & {
-  amounts: BigNumber[];
-  walletAddress: string[];
-};
-
 export interface IWorldInterface extends utils.Interface {
   functions: {
     "call(bytes16,bytes16,bytes)": FunctionFragment;
@@ -962,9 +952,9 @@ export interface IWorld extends BaseContract {
     ): Promise<[boolean]>;
 
     getProjectDonator(
-      _hackathonId: PromiseOrValue<BytesLike>,
+      _projectId: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
-    ): Promise<[ProjectDonatorDataStructOutput]>;
+    ): Promise<[BigNumber[], string[]]>;
 
     getProjectInfo(
       _projectId: PromiseOrValue<BytesLike>,
@@ -1318,9 +1308,9 @@ export interface IWorld extends BaseContract {
   ): Promise<boolean>;
 
   getProjectDonator(
-    _hackathonId: PromiseOrValue<BytesLike>,
+    _projectId: PromiseOrValue<BytesLike>,
     overrides?: CallOverrides
-  ): Promise<ProjectDonatorDataStructOutput>;
+  ): Promise<[BigNumber[], string[]]>;
 
   getProjectInfo(
     _projectId: PromiseOrValue<BytesLike>,
@@ -1674,9 +1664,9 @@ export interface IWorld extends BaseContract {
     ): Promise<boolean>;
 
     getProjectDonator(
-      _hackathonId: PromiseOrValue<BytesLike>,
+      _projectId: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
-    ): Promise<ProjectDonatorDataStructOutput>;
+    ): Promise<[BigNumber[], string[]]>;
 
     getProjectInfo(
       _projectId: PromiseOrValue<BytesLike>,
@@ -2077,7 +2067,7 @@ export interface IWorld extends BaseContract {
     ): Promise<BigNumber>;
 
     getProjectDonator(
-      _hackathonId: PromiseOrValue<BytesLike>,
+      _projectId: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -2434,7 +2424,7 @@ export interface IWorld extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     getProjectDonator(
-      _hackathonId: PromiseOrValue<BytesLike>,
+      _projectId: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 

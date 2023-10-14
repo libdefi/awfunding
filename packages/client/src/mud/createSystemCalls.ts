@@ -31,7 +31,7 @@ export function createSystemCalls(
 
 
   const deleteProjectByAdmin = async (_hackathonId: string) => {
-    const tx = await worldSend('deleteProject', [_hackathonId]);
+    const tx = await worldSend('deleteProjectByAdmin', [_hackathonId]);
   };
 
   const donateEth = async (_hackathonId: string, _amount: ethers.BigNumber) => {
