@@ -42,7 +42,7 @@ contract ProjectSystem is System {
 
   function _deleteProject(bytes32 _projectId) internal {
     ProjectData memory _projectData = Project.get(_projectId);
-
+    require(_projectData.fundTarget > 0, "Your project is not exist.");
     Project.deleteRecord(_projectId);
     ProjectInfo.deleteRecord(_projectId);
   }
