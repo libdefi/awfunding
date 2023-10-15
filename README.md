@@ -1,5 +1,7 @@
 # Onchain Funding
 
+![onchain-crowd-funding](https://github.com/libdefi/awfunding/assets/8872443/7f51409e-db39-4952-85fb-f3e5dfab7449)
+
 The fully onchain crowdfunding protocol is driven by a MUD.
 
 Our goal is to support Web3 builders, especially Autonomous World/Fully onchain games and other Onchain maxi builders, and boost the AW/FOC
