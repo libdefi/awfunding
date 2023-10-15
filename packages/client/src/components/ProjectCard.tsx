@@ -72,7 +72,7 @@ export const ProjectCard = ({ projectNum }: ProjectCardProps) => {
   ) : name ? (
     <Link to={`/project/${projectNum}`}>
       <div className="card w-80 bg-base-100 shadow-xl">
-        <figure><img src="https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F582309379%2F1637870253013%2F1%2Foriginal.20230824-143912?w=940&auto=format%2Ccompress&q=75&sharp=10&rect=0%2C120%2C1920%2C960&s=a8b9007be433fbfd7df29137c550abbb" alt="Shoes" /></figure>
+        <figure><img src={imageUri} alt="Project image" /></figure>
         <div className="card-body">
           <h2 className="card-title">{name}</h2>
           <div className="flex justify-between items-center">

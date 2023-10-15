@@ -16,24 +16,7 @@ export const ProjectPage = () => {
   const bigNum = ethers.BigNumber.from(id);
   const projectId = '0x' + bigNum.toHexString().slice(2).padStart(64, '0');
 
-  const [activeTab, setActiveTab] = useState(1);
-  const [name, setName] = useState('');
-  const [uri, setUri] = useState('');
-  const [description, setDescription] = useState('');
-  const [owner, setOwner] = useState('');
-  const [prizeToken, setPrizeToken] = useState('');
-  const [phase, setPhase] = useState(0);
-  const [winnerCount, setWinnerCount] = useState(0);
-  const [voteNft, setVoteNft] = useState('');
-  const [startTimestamp, setStartTimestamp] = useState(0);
-  const [submitPeriod, setSubmitPeriod] = useState(0);
-  const [votingPeriod, setVotingPeriod] = useState(0);
-  const [withdrawalPeriod, setWithdrawalPeriod] = useState(0);
   const [modalOpen, setModalOpen] = useState(false);;
-
-  const handleTabClick = (tabIndex: number) => {
-    setActiveTab(tabIndex);
-  };
 
   const openModal = () => {
     setModalOpen(true);
@@ -48,6 +31,57 @@ export const ProjectPage = () => {
 
   const initialSponsors: [BigNumber[], string[]] = [[], []];
   const [donator, setDonator] = useState(initialSponsors);
+
+  const [imageUri, setImageUri] = useState('');
+  const [name, setName] = useState('');
+  const [projectsTargetRate, setProjectsTargetRate] = useState(0);
+  const [fundingPeriod, setFundingPeriod] = useState(BigNumber.from(0));
+  const [fundingTarget, setFundingTarget] = useState(BigNumber.from(0));
+  const [deposit, setDeposit] = useState(BigNumber.from(0));
+  const [prizeToken, setPrizeToken] = useState('');
+  const [donatedAmount, setDonatedAmount] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [donatorsAmount, setDonatorsAmount] = useState(0);
+  const [submitPeriod, setSubmitPeriod] = useState(BigNumber.from(0));
+
+  const calculateTimeRemaining = () => {
+    const timeInSeconds = Number(fundingPeriod) - Date.now() / 1000;
+    const hoursRemaining = Math.floor(Math.abs(timeInSeconds) / 3600);
+
+    let timeRemaining;
+    if (hoursRemaining >= 24) {
+      const daysRemaining = Math.floor(Math.abs(timeInSeconds) / 86400);
+      timeRemaining = `${daysRemaining} days`;
+    } else {
+      timeRemaining = `${hoursRemaining} hours`;
+    }
+    return timeInSeconds >= 0 ? `about ${timeRemaining}` : `Finished`;
+  };
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const project = await worldContract.getProject(projectId);
+        const projectInfo = await worldContract.getProjectInfo(projectId);
+        console.log('@@project.fundedSum', project.fundedSum);
+        console.log('@@projectInfo', projectInfo);
+        setName(projectInfo.name);
+        setImageUri(projectInfo.imageUri);
+        setFundingPeriod(project.fundingPeriod);
+        setDonatedAmount(project.fundedSum);
+
+        setFundingTarget(project.fundTarget);
+
+        // if ((project.fundedSum / project.fundTarget) > 100) {
+        //   setProjectsTargetRate(100);
+        // } else {
+        //   setProjectsTargetRate(project.fundedSum / project.fundTarget);
+        // }
+      } catch (error) {
+        console.error(error);
+      }
+    })();
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -65,6 +99,7 @@ export const ProjectPage = () => {
           sortedSponsors.map(item => item.address)
         ]);
       }
+      setDonatorsAmount(donators[0].length);
 
     })();
   }, []);
@@ -85,18 +120,20 @@ export const ProjectPage = () => {
       {error && <ToastError message={error} />}
       {success && <ToastSuccess message={success} />}
       <div className="card lg:card-side shadow-xl bg-black">
-        <figure><img src="https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F582309379%2F1637870253013%2F1%2Foriginal.20230824-143912?w=940&auto=format%2Ccompress&q=75&sharp=10&rect=0%2C120%2C1920%2C960&s=a8b9007be433fbfd7df29137c550abbb" alt="Album"/></figure>
+        <figure><img src={imageUri} alt="Album"/></figure>
         <div className="card-body">
+          
+          <h1 className="card-title text-white">{name}</h1>
           <p className="text-white">Donated amount</p>
-          <h2 className="card-title text-white">1.0005 ETH</h2>
-          <p className="text-white">Target 1.25 ETH</p>
+          <h2 className="card-title text-white">Donated{ethers.utils.formatUnits(donatedAmount, 18)}  ETH</h2>
+          <p className="text-white">Target {ethers.utils.formatUnits(fundingTarget, 18)}  ETH</p>
           <div className="text-white">
             <span>Donator</span>
-            <span>33 people</span>
+            <span>{donatorsAmount} people</span>
           </div>
           <div className="text-white">
-            <span>Rest</span>
-            <span>14 days</span>
+            <span>Rest </span>
+            <span>{calculateTimeRemaining()}</span>
           </div>
           <div className="card-actions justify-end">
             <a onClick={openModal}>
@@ -143,7 +180,7 @@ export const ProjectPage = () => {
           ))}
         </div>
       ) : (
-        <p>No one donated</p>
+        <p className="mt-10 mx-auto">No one donated</p>
       )}
       <div className="mt-10 mx-auto">
         {

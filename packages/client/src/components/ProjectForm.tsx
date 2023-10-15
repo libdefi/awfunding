@@ -50,7 +50,7 @@ const ProjectForm: FC<ProjectFormProps> = ({
     systemCalls: { createProject },
   } = useMUD();
   const [donateToken, setDonateToken] = useState(donateTokens.ETH);
-  const [startTimestamp, setStartTimestamp] = useState(getWeeksLater(1.0));
+  const [startTimestamp, setStartTimestamp] = useState(getWeeksLater(0.5));
   const [fundTarget, setFundTarget] = useState(1.005);
   const [name, setName] = useState('');
   const [uri, setUri] = useState('');
@@ -91,7 +91,7 @@ const ProjectForm: FC<ProjectFormProps> = ({
       
       <h1 className="text-sm mb-1 mt-4 font-bold">Title image</h1>
       <p className="text-sm text-gray-500 mb-1">
-        The ideal aspect ratio is 1 : 1 - for example 512 x 512 px.
+        The ideal aspect ratio is 16 : 9 - for example 1200 x 630 px.
       </p>
       <input
         type="text"
