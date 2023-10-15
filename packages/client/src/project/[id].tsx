@@ -125,7 +125,7 @@ export const ProjectPage = () => {
               <div key={`sum-${index}`}>
                 <div className="col-span-1 border-b pb-2 pt-2 text-gray-500">
                   <a
-                      href={`https://optimistic.etherscan.io/address/${donator[1][index]}`}
+                      href={`https://explorer.jolnir.taiko.xyz/address/${donator[1][index]}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-blue-500"
